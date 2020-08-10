@@ -23,7 +23,7 @@ def main(srcDir, destDir):
 
 if __name__ == "__main__":
 	if len(sys.argv) != 3:
-		print("Usage: " + sys.argv[0] + "src_dir dst_dir")
+		print("Usage: " + sys.argv[0] + " src_dir dst_dir")
 		sys.exit(1)
 
 	main(*sys.argv[1:])
