@@ -1,1 +1,1 @@
-xdotool click --repeat 100 --delay 18 1
+xdotool click --repeat 4000000 --delay 10 1

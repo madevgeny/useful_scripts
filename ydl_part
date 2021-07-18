@@ -1,0 +1,2 @@
+ffmpeg $(youtube-dl -f bestvideo+bestaudio -g 'https://youtu.be/3gWtSWZJFdA' | sed 's/.*/-ss 1:25:07 -i &/') -t 00:10 -c copy out.mkv
+
