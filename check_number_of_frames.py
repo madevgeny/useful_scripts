@@ -4,31 +4,48 @@ import sys
 import os
 from PIL import Image
 
+def check(fileName):
+	try:
+		im = Image.open(fileName)
+	except Exception as e:
+		return False
+
+	return True
+
 def main(videoDir, nFrames):
-	missedFrameRanges = []
-	brokenFrames = []
-	first = True
+	missedFrames = []
 	for i in range(1, nFrames + 1):
 		fileName = os.path.join(videoDir, "cmimg%04d.png" % i)
-		if not os.path.isfile(fileName):
-			if first:
-				missedFrameRanges.append((i, -1))
-				first = False
-			else:
-				missedFrameRanges[-1] = (missedFrameRanges[-1][0], i)
-			#print(f"File {fileName} is missed.")
+
+		if not check(fileName):
+			missedFrames.append(i)
+
+	if not missedFrames:
+		print('Everything is ok!')
+		return
+
+	st = -1
+	en = -1
+	missedFrameRanges = []
+	for i in missedFrames:
+		if st < 0:
+			st = i
+		if en < 0:
+			en = i
+
+		d = i - en
+		if d <= 1:
+			en = i
 		else:
-			first = True
+			missedFrameRanges.append((st, en))
+			st = -1
+			en = -1
 
-			try:
-				im = Image.open(fileName)
-			except Exception as e:
-				brokenFrames.append(i)
-
+	if en > 0:
+		missedFrameRanges.append((st, en))
+		
 	for i in missedFrameRanges:
 		print(i)
-
-	print('Broken frames: ', brokenFrames)
 
 if __name__ == '__main__':
 	if 0:
@@ -38,4 +55,4 @@ if __name__ == '__main__':
 
 		main(*sys.argv[1:])
 	else:
-		main('/backup/render/', 72000)
+		main('/home/evgeny/sync/render', 72000)
